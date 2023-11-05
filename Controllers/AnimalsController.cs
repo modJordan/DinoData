@@ -18,7 +18,7 @@ namespace CretaceousApi.Controllers
     // GET api/animals
     // GET api/animals
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string name)
+    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string name, int minimumAge)
     {
       IQueryable<Animal> query = _db.Animals.AsQueryable();
 
@@ -30,6 +30,11 @@ namespace CretaceousApi.Controllers
       if (name != null)
       {
         query = query.Where(entry => entry.Name == name);
+      }
+      
+       if (minimumAge > 0)
+      {
+        query = query.Where(entry => entry.Age >= minimumAge);
       }
 
       return await query.ToListAsync();
